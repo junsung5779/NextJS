@@ -9,7 +9,6 @@ export default async function Home() {
    * 해당 페이지를 사용하는 모든 user 들이 DB I/O code를 볼 수 있다.
    * 따라서 DB I/O code는 server component 안에서만 쓰자.
    */
-  console.log(result)
   return (
     <main>
       <div>
