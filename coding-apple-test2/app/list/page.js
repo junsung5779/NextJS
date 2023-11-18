@@ -5,7 +5,6 @@ import DetailLink from './DetailLink'
 export default async function List() {
   const db = (await connectDB).db('coding-apple-test2')
   let result = await db.collection('post').find().toArray()
-  console.log(result)
 
   return (
     <div className="list-bg">
@@ -19,6 +18,7 @@ export default async function List() {
               <p>{result[idx].content}</p>
             </Link>
             <DetailLink />
+            <Link href={`/edit/${result[idx]._id}`}>수정</Link>
           </div>
         )
       })}
