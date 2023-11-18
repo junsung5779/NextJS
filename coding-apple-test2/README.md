@@ -4,8 +4,10 @@ First, run the development server:
 
 ## dependencies
 
-npm install
-npm install mongodb
+1. npm install
+   (npm 기본 패키지)
+2. npm install mongodb
+   (mongodb 접속 및 데이터 입출력 도와주는 library)
 
 ## Getting Started(build)
 
