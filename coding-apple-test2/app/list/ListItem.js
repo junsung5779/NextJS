@@ -23,14 +23,14 @@ export default function ListItem({ result }) {
    * ajax의 장점: <form>사용 시 요청보내면 항상 새로고침이 되는데
    * ajax는 새로고침없이 요청 전송 가능
    */
-
+  console.log(result)
   return (
     <div>
       {result.map((e, idx) => (
         <div className="list-item" key={idx}>
           {/* 일부 컴포넌트에만 prefetch 기능을 사용하고 싶으면 prefetch={false} */}
           {/* 개발중일 땐 prefetch 여부 확인불가 -> 사이트 발행 시 확인 가능*/}
-          <Link prefetch={false} href={`/detail/${result[idx]._id}`}>
+          <Link prefetch={false} href={`/detail/${result[idx]._id.toString()}`}>
             <h4>{result[idx].title}</h4>
             <p>{result[idx].content}</p>
           </Link>
@@ -39,12 +39,30 @@ export default function ListItem({ result }) {
           </button>
           <span
             onClick={() => {
-              fetch('/api/post/new', {
-                method: 'POST',
-                body: '데이터',
-              }).then(() => {
-                console.log(123123)
+              fetch('/api/post/delete', {
+                method: 'DELETE',
+                // 서버로 array나 object 형태로 보낼 땐 JSON.stringify({보낼 Object})를 사용하자
+                // ex) body: JSON.stringify({_id: result[idx]._id}
+                // {id: 1234} -> {"id": 1234} 로 변경해줌
+                body: JSON.stringify({
+                  _id: result[idx]._id,
+                }),
               })
+                .then((r) => {
+                  if (r.status == 200) {
+                    return r.json()
+                  } else {
+                    //서버가 에러코드전송시 실행할코드
+                  }
+                })
+                .then((r) => {
+                  console.log(r)
+                  window.location.reload()
+                })
+                .catch((error) => {
+                  //인터넷문제 등으로 실패시 실행할코드
+                  console.log(error)
+                })
             }}
           >
             삭제

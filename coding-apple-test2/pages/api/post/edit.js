@@ -7,7 +7,6 @@ export default async function handler(request, response) {
     title: request.body.title,
     content: request.body.content,
   }
-  console.log(requestBody)
   if (request.method == 'POST') {
     if (requestBody.title == '') {
       return response.status(500).json('너 제목 왜 안씀?')

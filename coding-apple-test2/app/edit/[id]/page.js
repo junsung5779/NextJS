@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb'
 export default async function Edit(props) {
   const db = (await connectDB).db('coding-apple-test2')
   let result = await db.collection('post').findOne({ _id: new ObjectId(props.params.id) })
-  console.log(result)
+  // console.log(result)
 
   // await db.collection('post').updateOne({}, { $set: {title:'바보제목', content: '바보내용'} })
 
