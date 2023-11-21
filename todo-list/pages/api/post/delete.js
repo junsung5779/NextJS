@@ -6,7 +6,7 @@ export default async function handler(request, response) {
   const requestBody = {
     _id: JSON.parse(request.body)._id,
   }
-  console.log(new Object(requestBody._id))
+  console.log('삭제 시작이닷!!!!')
   if (request.method === 'DELETE') {
     try {
       const db = (await connectDB).db('todo-DB')

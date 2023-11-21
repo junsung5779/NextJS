@@ -1,3 +1,7 @@
+/**
+ * client component
+ */
+
 'use client'
 
 import Link from 'next/link'
@@ -7,22 +11,36 @@ const weekdays = ['월', '화', '수', '목', '금', '토', '일']
 
 export default function ListItem({ result }) {
   const [selectedDay, setSelectedDay] = useState(null)
-
+  // 버튼 클릭 시
   const handleButtonClick = (value) => {
     setSelectedDay(value)
   }
 
-  const handleDelete = (itemId) => {
+  const handleDelete = (dataId) => {
     fetch('/api/post/delete', {
       method: 'DELETE',
-      body: JSON.stringify({ _id: itemId }),
+      // 서버로 array나 object 형태로 보낼 땐 JSON.stringify({보낼 Object})를 사용하자
+      // ex) body: JSON.stringify({_id: result[idx]._id}
+      // {id: 1234} -> {"id": 1234} 로 변경해줌
+      body: JSON.stringify({ _id: dataId }),
     })
-      .then((r) => (r.status === 200 ? r.json() : null))
-      .then((r) => {
-        console.log(r)
+      // 상태값이 200이면 응답값을 json으로 반환 하고 아니면 null 반환
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('응답값 200 받음')
+          return response.json()
+        } else {
+          //서버가 에러코드전송시 실행할코드
+          console.log('응답값 200 못받음')
+          throw new Error('서버 에러') // 예외를 던져서 .catch() 블록으로 이동
+        }
+      })
+      .then((responseData) => {
+        // 상태값200을 받은 경우 실행할 코드
         window.location.reload()
       })
       .catch((error) => {
+        //인터넷 문제 등으로 실패시 실행할코드
         console.log(error)
       })
   }
@@ -37,7 +55,8 @@ export default function ListItem({ result }) {
         <button onClick={() => handleButtonClick(null)}>전체</button>
       </div>
       {result
-        .filter((todolist) => (selectedDay ? todolist.day_of_week === selectedDay : true))
+        // props로 받은 result 배열을 filter 내에서 result로 받아서 사용
+        .filter((result) => (selectedDay ? result.day_of_week === selectedDay : true))
         .map((e, idx) => (
           <div className="list-item" key={idx}>
             <Link prefetch={false} href={`/detail/${e._id.toString()}`}>
@@ -49,7 +68,7 @@ export default function ListItem({ result }) {
               <Link href={`/edit/${e._id}`}>수정</Link>
             </button>
             <button className="deleteButton">
-              <span onClick={() => handleDelete(item._id)}>삭제</span>
+              <span onClick={() => handleDelete(e._id)}>삭제</span>
             </button>
           </div>
         ))}
