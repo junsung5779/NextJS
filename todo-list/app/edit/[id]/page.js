@@ -4,9 +4,6 @@ import { ObjectId } from 'mongodb'
 export default async function Edit(props) {
   const db = (await connectDB).db('todo-DB')
   let result = await db.collection('todo-tbl').findOne({ _id: new ObjectId(props.params.id) })
-  // console.log(result)
-
-  // await db.collection('post').updateOne({}, { $set: {title:'바보제목', content: '바보내용'} })
 
   return (
     <div className="p-20">
